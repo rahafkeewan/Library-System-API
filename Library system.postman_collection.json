@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "dad1c1a9-2af2-40cc-bb4e-33f2a56b8cba",
+		"name": "Library system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40788789"
+	},
+	"item": [
+		{
+			"name": "get book id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/GetBook.php?ID={{NewID}}",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "{{NewID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new book",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let newColor = pm.variables.replaceIn('{{$randomColor}}')\r",
+							"let newMonth = pm.variables.replaceIn('{{$randomMonth}}')\r",
+							"\r",
+							"let ISBNNumber = pm.variables.replaceIn('{{$randomInt}}')\r",
+							"\r",
+							"let AISLENumber =pm.variables.replaceIn('{{$randomInt}}')\r",
+							"\r",
+							"let FirstNameAuthor =pm.variables.replaceIn('{{$randomFirstName}}')\r",
+							"\r",
+							"let LastNameAuthor =pm.variables.replaceIn('{{$randomLastName}}')\r",
+							"\r",
+							"let FullAuthorName =pm.collectionVariables.set(\"NewAuthorName\", FirstNameAuthor + \" \" + LastNameAuthor)\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"NewBookName\",newColor+\" \"+newMonth)\r",
+							"\r",
+							"pm.collectionVariables.set(\"NewISBNNumber\",ISBNNumber)\r",
+							"\r",
+							"pm.collectionVariables.set(\"NewAisleNumber\",AISLENumber*15)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let MyResponse = pm.response.json()\r",
+							"\r",
+							"let id = MyResponse.ID\r",
+							"\r",
+							"console.log(id)\r",
+							"\r",
+							"pm.collectionVariables.set(\"NewID\", id)\r",
+							"\r",
+							"pm.test(\"This is to test the response\", function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\":\"{{NewBookName}}\",\r\n\"isbn\":\"{{NewISBNNumber}}\",\r\n\"aisle\":\"{{NewAisleNumber}}\",\r\n\"author\":\"{{NewAuthorName}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/Addbook.php",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete book by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"ID\" : \"{{NewID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://rahulshettyacademy.com/Library/DeleteBook.php",
+					"protocol": "https",
+					"host": [
+						"rahulshettyacademy",
+						"com"
+					],
+					"path": [
+						"Library",
+						"DeleteBook.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "NewBookName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "NewISBNNumber",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "NewAisleNumber",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "NewAuthorName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "NewID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
